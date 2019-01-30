@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <openerp>
+        <data>
+            
+            <act_window
+                id="action_estudiante"
+                name="Estudiantes"
+                res_model="estudiantes.estudiantes"
+                view_mode="tree,form,kanban"
+            />
+            
+            <menuitem
+                id="menu_estudiante"
+                name="Estudiante"
+                parent="mail.mail_feeds"
+                sequence="20"
+                action="action_estudiante"
+            />
+
+            <act_window
+                id="action_materia"
+                name="Materia"
+                res_model="materia.materia"
+                view_mode="tree,form"
+            />
+
+            <menuitem
+                id="menu_materia"
+                name="Materia"
+                parent="mail.mail_feeds"
+                sequence="20"
+                action="action_materia"
+            />
+<!-- Herencia-->
+            <record model="ir.ui.view" id = "form_materias_id1">               
+                <field name="name">Grade</field>
+                <field name="model">res.partner</field>
+                <field name="inherit_id" ref="base.view_partner_form"/>
+                <field name="arch" type="xml">
+                    <field name="website" position="after">            
+                        <field name="materias_ids">
+                            <tree>
+                                <field name ="materia"/>
+                                <field name ="nota"/>
+                            </tree>
+                        </field>
+                    </field>
+                </field>
+		    </record>
+<!-- Filtro-->
+            <record id="view_filter_student" model="ir.ui.view">
+                <field name="name">Student Filter</field>
+                <field name="model">estudiantes.estudiantes</field>
+                <field name="arch" type="xml">
+                    <search>
+                        <field name ="materia"/>
+                        <field name ="nota"/>
+                        <group expand="0" string="Agrupar por">
+                            <separator/>
+                            <filter string="Materia" name="materia" context="{'group_by':'materia'}"/>
+                            <filter string="Estudiante" name="name" context="{'group_by':'name'}"/>
+                        </group>
+                    </search>
+                </field>
+            </record>
+<!-- Tree-->
+            <record id="view_tree_student" model="ir.ui.view">
+                <field name="name">View Tree</field>
+                <field name="model">estudiantes.estudiantes</field>
+                <field name="arch" type="xml">
+                    <tree colors="red:nota&lt;50">
+                        <field name="name"/>
+                        <field name="materia"/>
+                        <field name="nota"/>
+                    </tree>
+                </field>
+            </record>
+<!-- Kanban -->
+            <record id="view_kanban_student" model="ir.ui.view">
+                <field name="name">View Kanban</field>
+                <field name="model">estudiantes.estudiantes</field>
+                <field name="arch" type="xml">
+                    <kanban>
+                        <field name="name"/>
+                        <field name="materia"/>
+                        <field name="nota"/>
+                        <templates>
+                            <t t-name="kanban-box">
+                                <div class="oe_product_vignette">
+                                    <a type="open">
+                                        <img class="oe_kanban_image"
+                                            t-att-src="kanban_image('your_model', 'image', record.id.value)" />
+                                    </a>                                       
+                                            <a type="edit">
+                                                <field name="name"></field>
+                                                <field name="materia"></field>
+                                                <field name="nota"></field>
+                                            </a>
+                                        <ul>
+                                            <li name="materia"></li>
+                                            <li name="nota"></li>
+                                        </ul>
+                                </div>
+                            </t>
+                        </templates>
+                    </kanban>
+                </field>
+            </record>
+<!-- Calendario -->
+            <record id="view_calendar_student" model="ir.ui.view">
+                <field name="name">view_calendar_student</field>
+                <field name="model">estudiantes.estudiantes</field>
+                <field name="arch" type="xml"></field>
+                    <calendar date_start="create_date">
+                </field>
+            </record>
+        </data>
+    </openerp>
+
